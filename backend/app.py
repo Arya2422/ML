@@ -1,16 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import requests
 import os
 
 app = FastAPI()
 
-ML_URL = os.getenv("ML_URL")  # 👈 from env
+ML_URL = os.getenv("ML_URL")
+
+class HouseInput(BaseModel):
+    area: float
+    bedrooms: int
+    bathrooms: int
+    age: int
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tighten later
-    allow_credentials=True,
+    allow_origins=["*"],  # restrict later
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -20,14 +26,13 @@ def home():
     return {"message": "Backend Running"}
 
 @app.post("/predict")
-def predict(data: dict):
-    value = data.get("value")
-
-    if value is None:
-        return {"error": "value is required"}
-
+def predict(data: HouseInput):
     try:
-        response = requests.post(ML_URL, json={"value": value}, timeout=5)
+        response = requests.post(
+            f"{ML_URL}/predict",
+            json=data.dict(),
+            timeout=5
+        )
         return response.json()
     except Exception as e:
         return {"error": str(e)}
