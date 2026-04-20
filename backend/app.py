@@ -4,12 +4,12 @@ import requests
 
 app = FastAPI()
 
-ML_URL = "http://localhost:8001/predict"
+ML_URL = "https://ml-1-e6yo.onrender.com/predict"
 
 # Allow frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # frontend URL
+    allow_origins=["https://ml-3-dur5.onrender.com/"],  # frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -6,7 +6,7 @@ export default function Home() {
   const [result, setResult] = useState(null);
 
   const predict = async () => {
-    const res = await fetch("http://localhost:9000/predict", {
+    const res = await fetch("https://ml-2-9upv.onrender.com/predict", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({ value: Number(value) }),
