@@ -5,10 +5,14 @@ export default function Home() {
   const [value, setValue] = useState("");
   const [result, setResult] = useState(null);
 
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const predict = async () => {
-    const res = await fetch("https://ml-2-9upv.onrender.com/predict", {
+    const res = await fetch(`${BACKEND_URL}/predict`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ value: Number(value) }),
     });
 
@@ -19,7 +23,7 @@ export default function Home() {
   return (
     <div style={{ padding: 20 }}>
       <h1>ML App</h1>
-      <input value={value} onChange={(e)=>setValue(e.target.value)} />
+      <input value={value} onChange={(e) => setValue(e.target.value)} />
       <button onClick={predict}>Predict</button>
       {result && <p>Result: {result}</p>}
     </div>
