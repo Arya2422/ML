@@ -16,24 +16,25 @@ export default function Home() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const predict = async () => {
-    const res = await fetch(`${BACKEND}/predict`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        area: Number(form.area),
-        bedrooms: Number(form.bedrooms),
-        bathrooms: Number(form.bathrooms),
-        age: Number(form.age),
-      }),
-    });
+const predict = async () => {
 
-    const data = await res.json();
-    setResult(data);
-  };
+  const res = await fetch(`${BACKEND}/predict`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      area: Number(form.area),
+      bedrooms: Number(form.bedrooms),
+      bathrooms: Number(form.bathrooms),
+      age: Number(form.age),
+    }),
+  });
 
+  const data = await res.json();
+
+  setResult(data);
+};
   return (
     <div style={{ padding: 40, fontFamily: "sans-serif" }}>
       <h1>🏠 House Price Predictor</h1>
@@ -47,11 +48,16 @@ export default function Home() {
         <button onClick={predict}>Predict</button>
       </div>
 
-      {result && (
-        <div style={{ marginTop: 20 }}>
-          <h2>💰 {result.predicted_price}</h2>
-        </div>
-      )}
+    {result && (
+  <div style={{ marginTop: 20 }}>
+    {result.predicted_price && (
+      <h2>💰 {result.predicted_price}</h2>
+    )}
+    {result.error && (
+      <h2 style={{ color: "red" }}>❌ {result.error}</h2>
+    )}
+  </div>
+)}
     </div>
   );
 }
